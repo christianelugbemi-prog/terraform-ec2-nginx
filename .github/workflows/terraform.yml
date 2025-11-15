@@ -18,7 +18,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: .  # 👈 This fixes the "no working directory" error
+        working-directory: .  # 👈 This fixes the working directory error
 
     steps:
       - name: Checkout code
