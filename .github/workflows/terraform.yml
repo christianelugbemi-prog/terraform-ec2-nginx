@@ -16,8 +16,12 @@ jobs:
     name: Terraform
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: .  # 👈 This fixes the "no working directory" error
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Terraform
@@ -32,11 +36,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Terraform Format
-        run: terraform fmt -check
-
       - name: Terraform Init
         run: terraform init -input=false
+
+      - name: Terraform Format
+        run: terraform fmt -check
 
       - name: Terraform Validate
         run: terraform validate
