@@ -13,5 +13,5 @@ variable "instance_type" {
 variable "key_name" {
   description = "Existing AWS key pair name (as registered in AWS console)"
   type        = string
-  default     = "my-key-pair"   # <-- change to your key pair name (no .pem)
+  default     = "my-key-pair" # <-- change to your key pair name (no .pem)
 }

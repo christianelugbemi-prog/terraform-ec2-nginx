@@ -31,7 +31,7 @@ data "aws_subnets" "default_subnets" {
 # Security group allowing SSH, HTTP, HTTPS
 resource "aws_security_group" "web_sg" {
   name        = "terraform-nginx-sg"
-  description = "Allow SSH, HTTP, and HTTPS"   # <-- updated to match AWS exactly
+  description = "Allow SSH, HTTP, and HTTPS" # <-- updated to match AWS exactly
   vpc_id      = data.aws_vpc.default.id
 
   ingress {
@@ -39,7 +39,7 @@ resource "aws_security_group" "web_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]   # for testing only; restrict to your IP for production
+    cidr_blocks = ["0.0.0.0/0"] # for testing only; restrict to your IP for production
   }
 
   ingress {
