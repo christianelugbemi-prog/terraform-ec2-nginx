@@ -1,4 +1,3 @@
-# Triggering workflow again
 # Latest Ubuntu AMI (Canonical)
 data "aws_ami" "ubuntu" {
   most_recent = true
@@ -28,10 +27,15 @@ data "aws_subnets" "default_subnets" {
   }
 }
 
+# Random suffix to avoid duplicate SG names
+resource "random_id" "suffix" {
+  byte_length = 4
+}
+
 # Security group allowing SSH, HTTP, HTTPS
 resource "aws_security_group" "web_sg" {
-  name        = "terraform-nginx-sg"
-  description = "Allow SSH, HTTP, and HTTPS" # <-- updated to match AWS exactly
+  name        = "terraform-nginx-sg-${random_id.suffix.hex}"
+  description = "Allow SSH, HTTP, and HTTPS"
   vpc_id      = data.aws_vpc.default.id
 
   ingress {
@@ -39,7 +43,7 @@ resource "aws_security_group" "web_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # for testing only; restrict to your IP for production
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
@@ -66,7 +70,7 @@ resource "aws_security_group" "web_sg" {
   }
 
   tags = {
-    Name = "terraform-nginx-sg"
+    Name = "terraform-nginx-sg-${random_id.suffix.hex}"
   }
 }
 
@@ -86,13 +90,6 @@ resource "aws_instance" "web" {
               systemctl enable nginx
               systemctl start nginx
 
-              # Optional: clone a GitHub site into /var/www/website if you want
-              # Replace the URL below with your repo if desired (uncomment)
-              # cd /var/www
-              # git clone https://github.com/<your-username>/<your-repo>.git website
-              # chown -R www-data:www-data /var/www/website
-
-              # create a simple index page if repo not present
               if [ ! -f /var/www/html/index.html ]; then
                 echo "<html><body><h1>Hello from Terraform + Nginx on $(hostname)</h1></body></html>" > /var/www/html/index.html
                 chown www-data:www-data /var/www/html/index.html
