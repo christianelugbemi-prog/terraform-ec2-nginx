@@ -43,21 +43,20 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-- name: Terraform Plan
-  run: |
-    terraform plan -input=false -no-color \
-      -var="region=${{ env.AWS_REGION }}" \
-      -var="instance_type=${{ env.INSTANCE_TYPE }}" \
-      -var="key_name=${{ env.KEY_NAME }}"
+      - name: Terraform Plan
+        run: |
+          terraform plan -input=false -no-color \
+            -var="region=${{ env.AWS_REGION }}" \
+            -var="instance_type=${{ env.INSTANCE_TYPE }}" \
+            -var="key_name=${{ env.KEY_NAME }}"
 
-
-     - name: Terraform Apply (on main)
-  if: github.ref == 'refs/heads/main'
-  run: |
-    terraform apply -input=false -auto-approve -no-color \
-      -var="region=${{ env.AWS_REGION }}" \
-      -var="instance_type=${{ env.INSTANCE_TYPE }}" \
-      -var="key_name=${{ env.KEY_NAME }}"
+      - name: Terraform Apply (on main)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          terraform apply -input=false -auto-approve -no-color \
+            -var="region=${{ env.AWS_REGION }}" \
+            -var="instance_type=${{ env.INSTANCE_TYPE }}" \
+            -var="key_name=${{ env.KEY_NAME }}"
 
       - name: Show Outputs
         run: |
