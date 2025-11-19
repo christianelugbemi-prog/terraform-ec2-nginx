@@ -1,3 +1,4 @@
+# Triggering workflow again
 # Latest Ubuntu AMI (Canonical)
 data "aws_ami" "ubuntu" {
   most_recent = true
